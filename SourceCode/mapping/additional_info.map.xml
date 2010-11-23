@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<table name="additional_info">
+<fields>
+<field 
+            bind="ADD_INFO_ID" 
+            type="Primary" />
+<field 
+            bind="CLASS_ID" 
+            type="foreign"
+	    adapter="classified" />
+<field 
+            bind="ADD_INFO_MASTER_ID" 
+            type="foreign" 
+            adapter="additional_info_master" />
+<field 
+            bind="INFO_VALUE" 
+            type="Char" 
+            size="100" />
+<field 
+            bind="INFO_TYPE" 
+            type="Char" 
+            size="1" />
+</fields>
+</table>
+
+

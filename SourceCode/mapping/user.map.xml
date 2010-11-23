@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<table name="user">
+	<fields>
+		<field 
+			name="user_id"
+            bind="USER_ID" 
+            type="Primary" />
+		<field 
+			name="username"
+            bind="USERNAME" 
+            type="Char" 
+            size="15" />
+		<field 
+			name="password"
+            bind="PASSWORD" 
+            type="Char" 
+            size="15"	/>
+		<field 
+			name="type"
+            bind="TYPE" 
+            type="Char" 
+            size="1"	/>
+	</fields>
+	<entity>
+		<collection name="User" adapter="internal_user" field="USER_ID" />
+	</entity>
+</table>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<table name="classified">
+<fields>
+<field 
+            bind="CLASS_ID" 
+            type="Primary" />
+<field 
+            bind="CAT_ID" 
+            type="foreign"
+	    adapter="category_master" />
+<field 
+            bind="INT_ID" 
+            type="foreign" 
+            adapter="internal_user" />
+<field 
+            bind="TITLE" 
+            type="Char" 
+            size="50" />
+<field 
+            bind="TYPE" 
+            type="Char" 
+            size="1" />
+<field 
+            bind="MIN_VALUE" 
+            type="float" />
+<field 
+            bind="MAX_VALUE" 
+            type="float" />
+
+<field 
+            bind="AD_DATE" 
+            type="Char" 
+            size="1" />
+<field 
+            bind="EXP_DATE" 
+            type="Char" 
+            size="1" />
+<field 
+            bind="EXPIRED" 
+            type="integer" 
+            size="tiny" />
+<field 
+            bind="IMAGE" 
+            type="Char" 
+            size="50" />
+</fields>
+</table>
+
+

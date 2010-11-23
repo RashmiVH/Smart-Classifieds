@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<table name="search">
+<fields>
+<field 
+            bind="SEARCH_ID" 
+            type="Primary" />
+<field 
+            bind="CLASS_ID" 
+            type="foreign"
+	    adapter="classified" />
+<field 
+            bind="INT_ID" 
+            type="foreign" 
+            adapter="internal_user" />
+<field 
+            bind="SEARCH_STRING" 
+            type="text" />
+<field 
+            bind="SEARCH_TIMESTAMP" 
+            type="date" />
+</fields>
+</table>
+
+

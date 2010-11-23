@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<pdomap>
+	<connections>
+		<add 
+            dns="mysql:host=localhost;dbname=sc" 
+            user="root" pwd="mysql" />
+	</connections>
+	<mapping root="./mapping/">
+		<adapter 
+            name="user" 
+            />
+		<adapter 
+            name="classified" 
+            />
+		<adapter 
+            name="search" 
+            />
+		<adapter name="additional_info_master"/>
+		<adapter name="additional_info"/>
+		<adapter name="category_master"/>
+		<adapter name="external_system"/>
+		<adapter name="internal_user"/>
+    </mapping>
+</pdomap>

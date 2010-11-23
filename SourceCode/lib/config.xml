@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<pdomap>
+    <!-- 
+        Database configuration 
+        Set : adapter="*" for automatic search
+        Set : adapter="MySQL" to force using mysql adapter for example          
+    -->
+    <database adapter="*">
+        <adapter enabled="true" name="MySQL">
+            <check type="mysql" />
+            <check module="pdo_mysql" />
+        </adapter>
+        <adapter enabled="false" name="MSSQL">
+            <check type="mssql" />
+            <check module="pdo_mssql" />
+        </adapter>
+        <adapter enabled="false" name="PgSQL">
+            <check type="pgsql" />
+            <check module="pdo_pgsql" />
+        </adapter>
+        <adapter enabled="false" name="SQLite">
+            <check type="sqlite" />
+            <check module="pdo_sqlite" />
+        </adapter>
+        <!-- Fields configuration -->
+        <fields>
+            <field name="Boolean" enabled="true">
+                <params>
+                    <param name="trueKey">true</param>
+                    <param name="falseKey">false</param>
+                </params>
+            </field>
+            <field name="Integer" enabled="true">
+                <params>
+                    <!-- byte 1 -->
+                    <param name="tiny" bits="8" />  
+                    <!-- byte 2 -->
+                    <param name="small" bits="16" />
+                    <!-- byte 3 -->
+                    <param name="medium" bits="24" />
+                    <!-- byte 4 -->
+                    <param name="normal" bits="32" />
+                    <!-- byte 8 -->
+                    <param name="big" bits="64" />
+                </params>
+            </field>
+        </fields>              
+    </database>
+    <!-- 
+        Cache configuration :
+        Adapter : you can specify and adapter, or let system chose the best
+        one depending enabled modules.
+        Set : adapter="*" for automatic search
+        Set : adapter="File" to force using files adapter for example  
+    -->
+    <cache adapter="*">
+        <params>
+            <param name="path">./Cache/Tmp/</param>            
+            <param name="guid">global</param>
+            <param name="timeout">0</param>
+        </params>
+        <adapter enabled="false" name="APC">
+            <check module="apc" />
+        </adapter>
+        <adapter enabled="false" name="MemCache">
+            <check module="memcache" />
+            <params>
+                <param name="server">localhost</param>
+                <param name="port">11211</param>
+            </params>
+        </adapter>
+        <!-- 
+            automatically get file adapter 
+            if others checks fails or are not enabled 
+        -->
+        <adapter enabled="true" name="File" />
+    </cache>
+    <!--
+        Defines mapping entities managers     
+    -->
+    <mapping default="Adapter">
+        <adapter name="Adapter" extends="*">
+            <entity name="Entity">
+                <!-- 
+                    Defines default entity requests
+                -->
+                <requests />
+            </entity>
+            <!-- 
+                Define abstract fields
+            -->
+            <fields>
+                <field bind="Id" type="primary" />
+            </fields>
+            <!-- 
+                Defines default adapter requests
+            -->
+            <requests />
+        </adapter>
+    </mapping>
+    <!--
+        Defines installed plugins
+    -->
+    <plugins>
+        <plugin enabled="false" name="ComplexFields" />
+        <plugin enabled="false" name="ComplexObjects" />
+    </plugins>
+</pdomap>

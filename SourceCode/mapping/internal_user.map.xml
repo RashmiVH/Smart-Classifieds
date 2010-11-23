@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<table name="internal_user">
+<fields>
+<field 
+            bind="INT_ID" 
+            type="Primary" />
+<field 
+            type="foreign" 
+            bind="USER_ID"
+		adapter="user" />
+<field 
+            bind="NAME" 
+            type="Char"
+            size="50" />
+<field 
+            bind="EMAIL" 
+            type="Char"
+            size="60" />
+<field 
+            bind="ADDR_LINE1" 
+            type="Char"
+            size="100" />
+<field 
+            bind="ADDR_LINE2" 
+            type="Char"
+            size="100"
+		null="true" />
+<field 
+            bind="ADDR_CITY" 
+            type="Char"
+            size="50" />
+<field 
+            bind="ADDR_STATE" 
+            type="Char"
+            size="50" />
+<field 
+            bind="ADDR_COUNTRY" 
+            type="Char"
+            size="50" />
+<field 
+            bind="PIN" 
+            type="Char"
+            size="10" />
+<field 
+            bind="PHONE" 
+            type="Char"
+			size="15"
+            />
+
+</fields>
+</table>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<table name="test">
+	<fields>
+		<field 
+            bind="Id" 
+            type="Primary" />
+		<field 
+            bind="Name" 
+            type="Char" 
+            size="64" />
+		<field 
+            bind="Value" 
+            type="Text" 
+            null="true"	/>
+	</fields>
+</table>

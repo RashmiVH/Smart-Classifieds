@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY swrl "http://www.w3.org/2003/11/swrl#" >
+    <!ENTITY swrlb "http://www.w3.org/2003/11/swrlb#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY protege "http://protege.stanford.edu/plugins/owl/protege#" >
+    <!ENTITY xsp "http://www.owl-ontologies.com/2005/08/07/xsp.owl#" >
+]>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns="http://localhost/sc/classified.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:sc="http://localhost/sc/classified.owl#">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/sc/classified.owl#"/>
+  </owl:Ontology>
+  <Book rdf:ID="book1">
+        <Author xml:lang="en">Karthikeyan</Author>
+        <BookName rdf:datatype="&xsd;string"
+            >How to tie a tie</BookName>
+        <BookType rdf:datatype="&xsd;string">Fact</BookType>
+        <ClassifiedDate rdf:datatype="&xsd;dateTime"
+            >2010-04-11T00:00:00</ClassifiedDate>
+        <ClassifiedType rdf:datatype="&xsd;string">Sell</ClassifiedType>
+        <Edition rdf:datatype="&xsd;string">2</Edition>
+        <Expired rdf:datatype="&xsd;boolean">false</Expired>
+        <Image rdf:datatype="&xsd;string">none</Image>
+        <ISBN rdf:datatype="&xsd;string">122-232-23</ISBN>
+        <MinValue rdf:datatype="&xsd;float">200.0</MinValue>
+        <Publisher xml:lang="en">IIITB</Publisher>
+        <PublisherYear rdf:datatype="&xsd;int">2009</PublisherYear>
+        <Title rdf:datatype="&xsd;string"
+            >Dont know to tie a tie?</Title>
+        <ValidTill rdf:datatype="&xsd;dateTime"
+            >2011-04-11T00:00:00</ValidTill>
+    </Book>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4.4, Build 579)  http://protege.stanford.edu -->

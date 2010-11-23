@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<table name="additional_info_master">
+<fields>
+<field 
+            bind="ADD_INFO_MASTER_ID" 
+            type="Primary" />
+<field 
+            type="foreign" 
+            bind="CAT_ID"
+		adapter="category_master" />
+<field 
+            bind="INFO_NAME" 
+            type="Char"
+		size="20" />
+<field 
+            bind="MANDATORY" 
+            type="integer"
+			size="tiny"/>
+
+<field 
+            bind="TYPE" 
+            type="Char"
+		size="1" />
+		
+<field 
+            bind="COMMENTS" 
+            type="Text"
+            null="true" />
+</fields>
+</table>

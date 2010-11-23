@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <!-- Table tag structure -->
+    <xs:element name="table">
+        <xs:complexType>
+            <!-- TAGS -->
+            <xs:sequence>
+                <!-- Define the table fields -->
+                <xs:element name="fields" type="FieldsType" 
+                    minOccurs="1" maxOccurs="1" />
+                <!-- Define the entity requests and options -->
+                <xs:element name="entity" type="EntityType" 
+                    minOccurs="0" maxOccurs="1" />
+                <!-- Define the adapter requests and options -->
+                <xs:element name="adapter" type="AdapterType" 
+                    minOccurs="0" maxOccurs="1" />
+            </xs:sequence>
+            <!-- TABLE NAME ATTRIBUTE -->
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <!-- OPTIONAL DATABASE KEY CONNECTION TO USE -->
+            <xs:attribute name="use" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    
+    
+    <!-- Fields tag structure -->
+    <xs:complexType name="FieldsType">
+        <!-- TAGS -->
+        <xs:sequence>
+            <!-- Simple list of fields (at least one) -->
+            <xs:element name="field" type="FieldType" 
+                minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Field -->
+    <xs:complexType name="FieldType">
+        <!-- TAGS -->
+        <xs:sequence>
+            <!-- USED FOR ENUM TYPE TO DEFINE POSSIBLE VALUES -->
+            <xs:element name="value" type="ValueType" 
+                minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <!-- FIELD BIND ATTRIBUTE -->
+        <xs:attribute name="bind" type="xs:string" use="required" />
+        <!-- FIELD TYPE ATTRIBUTE -->
+        <xs:attribute name="type" type="xs:string" use="required" />
+        <!-- 
+            LIST OF ALL OPTIONAL FIELDS
+        -->
+        <xs:attribute name="name" type="xs:string" />
+        <!-- 
+            Field size depending field type
+        -->
+        <xs:attribute name="size" type="xs:string" />
+        <!-- 
+            Defines if integers is unsigned or not
+        -->
+        <xs:attribute name="unsigned" type="xs:boolean" />
+        <!--
+            Field null constraint
+        -->
+        <xs:attribute name="null" type="xs:boolean" />
+        <!--
+            Field should be indexed for faster select where
+        -->
+        <xs:attribute name="indexed" type="xs:boolean" />
+        <!--
+            Default field value when not set
+        -->
+        <xs:attribute name="default" type="xs:string" />
+        <!--
+            Automaticaly calculated formula for field
+        -->
+        <xs:attribute name="calculated" type="xs:string" />
+        <!--
+            Foreign key adapter name
+        -->
+        <xs:attribute name="adapter" type="xs:string" />
+    </xs:complexType>        
+    
+    <!-- Value tag structure -->
+    <xs:complexType name="ValueType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <!-- Define an optional key value for generic configuration -->
+                <xs:attribute name="key" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- Adapter tag structure -->
+    <xs:complexType name="AdapterType">    
+        <!-- TAGS -->
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <!-- Define a CRUD request -->
+                <xs:element name="request" type="RequestType" />
+                <!-- Define a transaction with some specific cases -->
+                <xs:element name="transaction" type="TransactionType" />
+            </xs:choice>
+        </xs:sequence>
+        <!-- Class name to load when unserialize an entity -->
+        <xs:attribute name="class" type="xs:string" />
+    </xs:complexType>
+    
+    <!-- Entity tag structure -->
+    <xs:complexType name="EntityType">    
+        <!-- TAGS -->
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <!-- Define a collection from a resultset -->
+                <xs:element name="collection" type="CollectionType" />
+                <!-- Define a CRUD request -->
+                <xs:element name="request" type="RequestType" />
+                <!-- Define a transaction with some specific cases -->
+                <xs:element name="transaction" type="TransactionType" />
+            </xs:choice>
+        </xs:sequence>
+        <!-- Class name to load when unserialize an entity -->
+        <xs:attribute name="class" type="xs:string" />
+    </xs:complexType>
+    
+    <!-- Request type Enum -->
+    <xs:simpleType name="RequestTypeEnum">
+        <xs:restriction base="xs:string">
+            <!-- Return a result collection -->
+            <xs:enumeration value="select" />
+            <!-- Return directly one entity -->
+            <xs:enumeration value="select-one" />
+            <!-- Inserting an entity -->
+            <xs:enumeration value="insert" />
+            <!-- Updating an entity -->
+            <xs:enumeration value="update" />
+            <!-- Deleting an entity -->
+            <xs:enumeration value="delete" />
+        </xs:restriction>
+    </xs:simpleType>    
+
+    <!-- Request tag structure -->
+    <xs:complexType name="RequestType">    
+        <!-- TAGS -->
+        <xs:sequence>
+            <!-- List of request parameters -->
+            <xs:element name="params" type="ParamsType" 
+                minOccurs="0" maxOccurs="1" />   
+            <!-- Join with others adapters (on select requests) -->        
+            <xs:element name="join" type="JoinType"
+                minOccurs="0" maxOccurs="unbounded" />
+            <!-- Setting a value for update and insert requests -->           
+            <xs:element name="set" 
+                minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <!-- Define the field name to set -->
+                    <xs:attribute name="field" 
+                        type="xs:string" use="required" />
+                    <!-- 
+                        Define the field value to set, 
+                        become optionnal if set literal or function 
+                        attributes
+                    -->
+                    <xs:attribute name="value" 
+                        type="xs:string" />
+                    <!-- 
+                        Define a literal expression for automatically 
+                        calculate the field value
+                    -->
+                    <xs:attribute name="literal" type="xs:string" />
+                    <!-- 
+                        Define a function to execute over value
+                    -->
+                    <xs:attribute name="function" type="xs:string" />
+                </xs:complexType>
+            </xs:element>            
+            <!-- Defines the where -->       
+            <xs:element name="where" type="WhereType" 
+                minOccurs="0" maxOccurs="1" />    
+            <!-- Ordering the request -->
+            <xs:element name="order" type="OrderType" 
+                minOccurs="0" maxOccurs="unbounded" />
+            <!-- Limiting the request -->
+            <xs:element name="limit" type="LimitType" 
+                minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <!-- Request name -->
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <!-- Request type -->
+        <xs:attribute name="type" type="RequestTypeEnum" use="required" />
+        <!-- 
+            Optional : specify the request adapter (using current adapter) 
+        -->
+        <xs:attribute name="adapter" type="xs:string" />
+    </xs:complexType>
+
+    <!-- Defines the order tag -->
+    <xs:complexType name="OrderType">
+        <!-- define the order field -->
+        <xs:attribute name="by" 
+            type="xs:string" use="required" />
+        <!-- define the order direction (by default ASC) -->
+        <xs:attribute name="direction" type="OrderDirectionEnum" />
+    </xs:complexType>
+    
+    <!-- Define the ordering directions -->
+    <xs:simpleType name="OrderDirectionEnum">
+        <xs:restriction base="xs:string">
+            <!-- Order ASC -->
+            <xs:enumeration value="asc" />
+            <!-- Order DESC -->
+            <xs:enumeration value="desc" />
+        </xs:restriction>
+    </xs:simpleType> 
+    
+    <!-- Defines the join tag -->
+    <xs:complexType name="JoinType">
+        <!-- 
+            Define the adapter to join with "on" 
+            throw it's primary key
+        -->
+        <xs:attribute name="adapter" 
+            type="xs:string" use="required" />
+        <!--
+            Adapter to link, if not defined will 
+            use the current file adapter
+        -->
+        <xs:attribute name="on" 
+            type="xs:string" />
+        <!-- 
+            Field on adapter used for join, 
+            if not specified, it will parse the adapter
+            structure to find the first foreign key
+            linked to "adapter" adapter
+        -->
+        <xs:attribute name="field" 
+            type="xs:string" />
+    </xs:complexType>
+    
+    <!-- Define the limit tag -->
+    <xs:complexType name="LimitType">
+        <!-- 
+            Define the start offset 
+            used in select requests only
+        -->
+        <xs:attribute name="start" type="xs:int" />
+        <!-- 
+            Define the length size 
+            used in select, update and delete 
+        -->
+        <xs:attribute name="length" type="xs:int" />
+    </xs:complexType>
+
+    <!-- Params array type -->
+    <xs:complexType name="ParamsType">
+        <xs:sequence>
+            <xs:element name="param" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <!-- Parameter name -->
+                    <xs:attribute name="name" 
+                        type="xs:string" use="required" />
+                    <!-- Parameter default value -->
+                    <xs:attribute name="default" 
+                        type="xs:string" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Boolean operator for conditions -->
+    <xs:simpleType name="OperatorsEnum">
+        <xs:restriction base="xs:string">
+           <xs:enumeration value="or" />
+            <xs:enumeration value="and" />
+        </xs:restriction>
+    </xs:simpleType>   
+
+    <!-- The where tag -->
+    <xs:complexType name="WhereType">
+        <!-- Tags -->
+        <xs:sequence>
+            <xs:element name="cond" type="ConditionType" 
+                minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <!-- 
+            Optional : Where operator for root condition tags (by default and)
+        -->
+        <xs:attribute name="operator" type="OperatorsEnum" />
+    </xs:complexType>
+    
+    <!-- Define the condition tag -->
+    <xs:complexType name="ConditionType">
+        <!-- 
+            sub array of conditions, can on be defined if 
+            previously defined on father the operator attribute
+        -->
+        <xs:sequence>
+            <xs:element name="cond" type="ConditionType" 
+                minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <!-- 
+            Define this attribute to create a sub array of
+            conditions joined with specified operator
+        -->
+        <xs:attribute name="operator" type="OperatorsEnum" />
+        <!-- Field name -->
+        <xs:attribute name="field" type="xs:string" />
+        <!-- Adapter name (if using join) -->
+        <xs:attribute name="adapter" type="xs:string" />
+        <!-- Equals criteria -->
+        <xs:attribute name="equals" type="xs:string" />
+        <!-- Like search criteria -->
+        <xs:attribute name="like" type="xs:string" />
+        <!-- NOT criteria -->
+        <xs:attribute name="not" type="xs:string" />
+        <!-- IS criteria -->
+        <xs:attribute name="is" type="xs:string" />
+        <!-- Superior criteria -->
+        <xs:attribute name="superior" type="xs:string" />
+        <!-- Inferior criteria -->
+        <xs:attribute name="inferior" type="xs:string" />
+        <!-- 
+        
+            Using a function on specified criteria value 
+            @todo : should create a list of accepted functions
+            @example
+            
+            <cond field="password" equals="secret" function="md5" />
+            
+            will translate : where password = md5('secret')
+            
+            You can use all **PHP** functions, accepting in the first argument
+            the parameter value (NOT SQL SPECIFIC FUNCTIONS)
+            
+            Another example that should work :
+            
+            <cond field="name" equals="jOhN" function="ucfirst" />
+            
+            will translate : where name = 'John'
+            
+            Note : now function is special, it's overriding value in 
+            criteria.
+            
+            That lets you write :
+            
+            <cond field="lastTime" inferior="" function="now" /> 
+            
+        -->
+        <xs:attribute name="function" type="xs:string" />
+    </xs:complexType>
+
+    <!-- The collection tag -->
+    <xs:complexType name="CollectionType">
+        <!-- tags for collection requesting -->
+        <xs:sequence>
+            <!-- Defines the where -->       
+            <xs:element name="where" type="WhereType" 
+                minOccurs="0" maxOccurs="1" />    
+            <!-- Join with others adapters (on select requests) -->        
+            <xs:element name="join" type="JoinType"
+                minOccurs="0" maxOccurs="unbounded" />
+            <!-- Ordering the request -->
+            <xs:element name="order" type="OrderType" 
+                minOccurs="0" maxOccurs="unbounded" />
+            <!-- Limiting the request -->
+            <xs:element name="limit" type="LimitType" 
+                minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <!-- Define the collection name used for class getter -->    
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <!-- Define the adapter for casting result array -->
+        <xs:attribute name="adapter" type="xs:string" use="required" />
+        <!-- 
+            Define the field for join, if not defined it will be automatically
+            calculated from adapter attribute and possible joins
+        -->
+        <xs:attribute name="field" type="xs:string" />
+    </xs:complexType>
+    
+    <!-- The transaction definition tag -->
+    <xs:complexType name="TransactionType">
+        <!-- TAGS -->
+        <xs:sequence>
+            <!-- List of request parameters -->
+            <xs:element name="params" type="ParamsType" 
+                minOccurs="0" maxOccurs="1" />   
+            <!-- Join with others adapters (on select requests) -->        
+            <xs:element name="do" type="DoType"
+                minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <!-- Defines the transaction name -->
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <!-- The do tag definition (will be refactored) -->
+    <xs:complexType name="DoType">
+        <!-- define inner tags -->
+        <xs:sequence>
+            <!-- List of call parameters -->
+            <xs:element name="params" type="CallParamsType" 
+                minOccurs="0" maxOccurs="1" />   
+            <!-- True condition for check -->
+            <xs:element name="true" type="BooleanSequenceType"
+                minOccurs="0" maxOccurs="1" />
+            <!-- False condition for check -->
+            <xs:element name="false" type="BooleanSequenceType"
+                minOccurs="0" maxOccurs="1" />
+            <!-- 
+                REQUEST TAGS 
+                @todo : should be done with extending ...
+            -->
+            <!-- Join with others adapters (on select requests) -->        
+            <xs:element name="join" type="JoinType"
+                minOccurs="0" maxOccurs="unbounded" />
+            <!-- Setting a value for update and insert requests -->           
+            <xs:element name="set" 
+                minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <!-- Define the field name to set -->
+                    <xs:attribute name="field" 
+                        type="xs:string" use="required" />
+                    <!-- 
+                        Define the field value to set, 
+                        become optionnal if set literal or function 
+                        attributes
+                    -->
+                    <xs:attribute name="value" 
+                        type="xs:string" />
+                    <!-- 
+                        Define a literal expression for automatically 
+                        calculate the field value
+                    -->
+                    <xs:attribute name="literal" type="xs:string" />
+                    <!-- 
+                        Define a function to execute over value
+                    -->
+                    <xs:attribute name="function" type="xs:string" />
+                </xs:complexType>
+            </xs:element>            
+            <!-- Defines the where -->       
+            <xs:element name="where" type="WhereType" 
+                minOccurs="0" maxOccurs="1" />    
+            <!-- Ordering the request -->
+            <xs:element name="order" type="OrderType" 
+                minOccurs="0" maxOccurs="unbounded" />
+            <!-- Limiting the request -->
+            <xs:element name="limit" type="LimitType" 
+                minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="type" type="DoTypeEnum" use="required" />
+        <!-- CALL ATTRIBUTES -->
+        <xs:attribute name="method" type="xs:string" />
+        <xs:attribute name="assign" type="xs:string" />
+        <!-- CHECK & RETURN ATTRIBUTES -->
+        <xs:attribute name="param" type="xs:string" />
+        <!-- CHECK ATTRIBUTES FOR COMPARISON --> 
+        <!-- Equals criteria -->
+        <xs:attribute name="equals" type="xs:string" />
+        <!-- Like search criteria -->
+        <xs:attribute name="like" type="xs:string" />
+        <!-- NOT criteria -->
+        <xs:attribute name="not" type="xs:string" />
+        <!-- IS criteria -->
+        <xs:attribute name="is" type="xs:string" />
+        <!-- Superior criteria -->
+        <xs:attribute name="superior" type="xs:string" />
+        <!-- Inferior criteria -->
+        <xs:attribute name="inferior" type="xs:string" />
+        <!-- RETURN ATTRIBUTES -->
+        <xs:attribute name="value" type="xs:string" />
+        <xs:attribute name="string" type="xs:string" />
+        <!-- 
+            REQUEST ATTRIBUTES 
+        -->
+        <!-- 
+            Optional : specify the request adapter (using current adapter) 
+        -->
+        <xs:attribute name="adapter" type="xs:string" />
+    </xs:complexType>
+    
+    <!-- Define the true / false tags -->
+    <xs:complexType name="BooleanSequenceType">
+        <xs:sequence>
+            <xs:element name="do" type="DoType"
+                minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="return" type="ReturnType"
+                minOccurs="0" maxOccurs="1" />            
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Define the return tag -->
+    <xs:complexType name="ReturnType">
+        <xs:attribute name="param" type="xs:string" />
+        <xs:attribute name="value" type="xs:string" />
+        <xs:attribute name="string" type="xs:string" />
+    </xs:complexType>
+    
+    <!-- Params array type -->
+    <xs:complexType name="CallParamsType">
+        <xs:sequence>
+            <xs:element name="param" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <!-- 
+                        @todo : have to implement this attribute
+                        Parameter name (if not set use ordering) 
+                    -->
+                    <xs:attribute name="name" 
+                        type="xs:string" />
+                    <!-- Parameter value -->
+                    <xs:attribute name="value" 
+                        type="xs:string" use="required" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- The list of do types (+ request types) -->
+    <xs:simpleType name="DoTypeEnum">
+        <xs:restriction base="xs:string">
+            <!-- Call another procedure -->
+            <xs:enumeration value="call" />
+            <!-- Make a check syntax -->
+            <xs:enumeration value="check" />
+            <!-- Return a result -->
+            <xs:enumeration value="return" />
+            <!-- Return a result collection -->
+            <xs:enumeration value="select" />
+            <!-- Return directly one entity -->
+            <xs:enumeration value="select-one" />
+            <!-- Inserting an entity -->
+            <xs:enumeration value="insert" />
+            <!-- Updating an entity -->
+            <xs:enumeration value="update" />
+            <!-- Deleting an entity -->
+            <xs:enumeration value="delete" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

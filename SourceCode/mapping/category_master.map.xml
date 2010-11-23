@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<table name="category_master">
+<fields>
+<field 
+            bind="CAT_ID" 
+            type="Primary" />
+<field 
+            bind="CATEGORY_NAME" 
+            type="char"
+		size="20" />
+<field 
+            bind="COMMENTS" 
+            type="Text" />
+</fields>
+</table>

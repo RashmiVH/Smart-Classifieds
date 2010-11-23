@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<table name="external_system">
+<fields>
+<field 
+            bind="EXT_ID" 
+            type="Primary" />
+<field 
+            type="foreign" 
+            bind="USER_ID"
+		adapter="user" />
+<field 
+            bind="URL" 
+            type="Text"/>
+</fields>
+</table>
